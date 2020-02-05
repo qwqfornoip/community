@@ -8,12 +8,11 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 @Mapper
-@Repository
 public interface UsrMapper {
-    @Insert("INSERT INTO communityschema.usr (name, account_id, token, gmt_create, gmt_modified) " +
+    @Insert("INSERT INTO usr (name, account_id, token, gmt_create, gmt_modified) " +
             "values (#{name}, #{accountId}, #{token}, #{gmtCreate}, #{gmtModified})")
     public void insert(Usr usr);
 
-    @Select("SELECT * FROM communityschema.usr WHERE token=#{token}")
+    @Select("SELECT * FROM usr WHERE token=#{token}")
     Usr findByToken(@Param("token") String token);
 }

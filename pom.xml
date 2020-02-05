@@ -83,6 +83,12 @@
             <version>2.1.1</version>
         </dependency>
 
+        <!--flyway的依赖-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -90,6 +96,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>
+                        jdbc:mysql://localhost/community?serverTimezone=UTC&amp;allowPublicKeyRetrieval=true&amp;useUnicode=true&amp;characterEncoding=UTF-8
+                    </url>
+                    <user>root</user>
+                    <password>He1p;De$k-pcs x</password>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -19,7 +19,7 @@ import java.util.UUID;
 @Controller
 public class AuthorizeController {
 
-    @Autowired
+    @Autowired(required=false)
     private GithubProvider githubProvider;
 
     @Value("${github.client.id}")
@@ -29,13 +29,13 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
-    @Autowired
+    @Autowired(required=false)
     private UsrMapper usrMapper;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request, HttpServletResponse response){
+                           HttpServletResponse response){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
