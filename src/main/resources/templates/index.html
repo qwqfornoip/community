@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+    <!-- index.css -->
+    <link rel="stylesheet" href="css/index.css"/>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
@@ -18,7 +20,7 @@
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">qwq_noi Community</span>
             </button>
-            <a class="navbar-brand" href="#">qwq_noi Community</a>
+            <a class="navbar-brand" href="/">qwq_noi Community</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -29,6 +31,11 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                <li th:if="${session.usr != null}">
+                    <a href="/publish">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true">发布</span>
+                    </a>
+                </li>
                 <li class="dropdown" th:if="${session.usr != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-haspopup="true" aria-expanded="false" th:text="${session.usr.getName()}"><span
@@ -47,5 +54,37 @@
         </div>
     </div>
 </nav>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-xs-12 col-sm-12">
+            <h2>
+                <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 发起
+            </h2>
+            <hr>
+            <div class="media" th:each="quest : ${questions}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object index-icon img-rounded"
+                             th:src="${quest.usr.avatarUrl}"
+                             alt="这应该是头像">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${quest.title}"></h4>
+                    <span th:text="${quest.description}"></span>
+                    <ul class="list-inline text-desc">
+                        <li><span th:text="${quest.commentCount}"></span> 个回复</li>
+                        <li><span th:text="${quest.viewCount}"></span> 次浏览</li>
+                        <li><span th:text="${quest.likeCount}"></span> 点赞</li>
+                        <li><span th:text="${#dates.format(quest.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-xs-12 col-sm-12">
+            <h3>热门话题</h3>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -9,10 +9,13 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 public interface UsrMapper {
-    @Insert("INSERT INTO usr (name, account_id, token, gmt_create, gmt_modified) " +
-            "values (#{name}, #{accountId}, #{token}, #{gmtCreate}, #{gmtModified})")
-    public void insert(Usr usr);
+    @Insert("INSERT INTO usr (name, account_id, token, gmt_create, gmt_modified, avatar_url) " +
+            "values (#{name}, #{accountId}, #{token}, #{gmtCreate}, #{gmtModified}, #{avatarUrl})")
+    void insert(Usr usr);
 
     @Select("SELECT * FROM usr WHERE token=#{token}")
     Usr findByToken(@Param("token") String token);
+
+    @Select("SELECT * FROM usr WHERE id=#{id}")
+    Usr findById(@Param("id") Integer creator);
 }
