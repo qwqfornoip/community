@@ -15,15 +15,15 @@ public class GithubProvider {
 
         OkHttpClient client = new OkHttpClient();
 
-        RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDTO), mediaType);
+        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token")
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
+            assert response.body() != null;
             String string = response.body().string();//access_token=...&scope=...&token_type=...
-            String accessToken = string.split("&")[0].split("=")[1];
-            return accessToken;
+            return string.split("&")[0].split("=")[1];
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,9 +36,9 @@ public class GithubProvider {
                 .url("https://api.github.com/user?access_token=" + accessToken)
                 .build();
         try (Response response = client.newCall(request).execute()) {
+            assert response.body() != null;
             String str = response.body().string();
-            GithubUser githubUser = JSON.parseObject(str, GithubUser.class);
-            return githubUser;
+            return JSON.parseObject(str, GithubUser.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

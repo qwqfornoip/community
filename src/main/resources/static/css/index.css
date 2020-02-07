@@ -2,13 +2,13 @@ body {
     background: url("../img/bg.png") repeat;
 }
 
-h1,h2,h3,h4,h5,h6 {
-    font-weight: bold;
+a:hover,a:active,a:focus {
+    text-decoration:none;
 }
 
 .main {
     background-color: white;
-    margin: 30px 125px;
+    margin: 30px 100px;
 }
 
 .btn-publish {
@@ -21,7 +21,18 @@ h1,h2,h3,h4,h5,h6 {
     height: 45px;
 }
 
-.text-desc {
+.text-desc, .edit a {
     font-size:12px;
     color:#999999;
+}
+
+.profile .section{
+    margin-top: 15px;
+}
+
+.section a {
+    border: none;
+}
+.section a:active {
+    background-color: #337ab7;
 }

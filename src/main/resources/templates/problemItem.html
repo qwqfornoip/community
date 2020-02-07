@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="item(pagination)">
+    <!-- 列表 -->
+    <div class="media" th:each="quest : ${pagination.questions}">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object index-icon img-rounded"
+                     th:src="${quest.usr.avatarUrl}"
+                     alt="这应该是头像">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">
+                <a th:href="@{/question/{id}(id=${quest.id})}" th:text="${quest.title}"></a>
+            </h4>
+            <span th:text="${quest.description}"></span>
+            <ul class="list-inline text-desc">
+                <li><span th:text="${quest.commentCount}"></span> 个回复</li>
+                <li><span th:text="${quest.viewCount}"></span> 次浏览</li>
+                <li><span th:text="${quest.likeCount}"></span> 点赞</li>
+                <li><span th:text="${#dates.format(quest.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
