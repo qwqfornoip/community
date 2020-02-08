@@ -1,5 +1,6 @@
 package com.qwqnoi.community.controller;
 
+import com.qwqnoi.community.exception.CustomizeErrorCode;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +23,9 @@ public class CustomizeErrorController implements ErrorController {
     public ModelAndView errorHTML(HttpServletRequest request, Model model){
         HttpStatus status = getStatus(request);
         if (status.is4xxClientError()) {
-            model.addAttribute("message", "你似乎来到了没有知识的荒原......");
+            model.addAttribute("message", CustomizeErrorCode.OTHER_ERROR.getMessage());
         } else if (status.is5xxServerError()) {
-            model.addAttribute("message", "哎呀，服务器出错了......");
+            model.addAttribute("message", CustomizeErrorCode.SERVICE_ERROR.getMessage());
         }
         return new ModelAndView("error");
     }
