@@ -1,3 +1,8 @@
+@keyframes myHover {
+    0% {background-color: transparent;}
+    100% {background-color: rgba(37, 37, 37, 0.3);}
+}
+
 body {
     background: url("../img/bg.png") repeat;
 }
@@ -20,8 +25,29 @@ a:hover,a:active,a:focus {
     width: 45px;
     height: 45px;
 }
+.commentName {
+    padding-top: 14px;
+}
 
-.text-desc, .edit a {
+.commentText {
+    margin: 10px 0;
+}
+
+.endLine {
+    margin-bottom: 10px;
+    float: right;
+}
+
+.subLine {
+    padding-top: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.topSpace {
+    padding-top: 10px;
+}
+
+.text-desc, .text-desc *, .edit a {
     font-size:12px;
     color:#999999;
 }
@@ -30,9 +56,20 @@ a:hover,a:active,a:focus {
     margin-top: 15px;
 }
 
+.item button {
+    background: transparent;
+}
+.item button:hover {
+    animation:myHover 1s;
+}
+
 .section a {
     border: none;
 }
+.noneBorder * {
+    border: none;
+}
+
 .section a:active {
     background-color: #337ab7;
 }

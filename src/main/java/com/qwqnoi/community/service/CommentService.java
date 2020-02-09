@@ -1,15 +1,25 @@
 package com.qwqnoi.community.service;
 
+import com.qwqnoi.community.dto.CommentDTO;
 import com.qwqnoi.community.enums.CommentTypeEnum;
 import com.qwqnoi.community.exception.CustomizeErrorCode;
 import com.qwqnoi.community.exception.CustomizeException;
 import com.qwqnoi.community.mapper.CommentMapper;
 import com.qwqnoi.community.mapper.QuestionExtMapper;
 import com.qwqnoi.community.mapper.QuestionMapper;
-import com.qwqnoi.community.model.Comment;
-import com.qwqnoi.community.model.Question;
+import com.qwqnoi.community.mapper.UsrMapper;
+import com.qwqnoi.community.model.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -23,6 +33,10 @@ public class CommentService {
     @Autowired(required = false)
     private QuestionExtMapper questionExtMapper;
 
+    @Autowired(required = false)
+    private UsrMapper usrMapper;
+
+    @Transactional
     public void insert(Comment comment) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUNT);
@@ -44,5 +58,36 @@ public class CommentService {
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
         }
+    }
+
+    public List<CommentDTO> listByQuestionId(Long id) {
+        CommentExample commentExample = new CommentExample();
+        commentExample.createCriteria()
+                .andParentIdEqualTo(id)
+                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        List<Comment> comments = commentMapper.selectByExample(commentExample);
+        if (comments.isEmpty()) return new ArrayList<>();
+
+        //获取去重评论人,转换成usrIds
+        Set<Long> commentators = comments.stream().map(comment -> comment.getCommentator())
+                .collect(Collectors.toSet());
+        List<Long> usrIds = new ArrayList<>();
+        usrIds.addAll(commentators);
+
+        //获取评论人,转换为map
+        UsrExample usrExample = new UsrExample();
+        usrExample.createCriteria().andIdIn(usrIds);
+        List<Usr> usrs = usrMapper.selectByExample(usrExample);
+        Map<Long, Usr> usrMap = usrs.stream().collect(Collectors.toMap(usr->usr.getId(), usr->usr));
+
+        //转换comment为commentDTO
+        List<CommentDTO> commentDTOs = comments.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUsr(usrMap.get(comment.getCommentator()));
+            return commentDTO;
+        }).collect(Collectors.toList());
+
+        return commentDTOs;
     }
 }

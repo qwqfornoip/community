@@ -13,6 +13,8 @@
     <script src="/js/jquery-3.4.1.min.js"></script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <!-- get question information -->
+    <script src="/js/community.js"></script>
 </head>
 <body>
 <div th:replace="~{navigation :: nav}"></div>
@@ -29,7 +31,7 @@
                 </li>
             </ul>
             <hr>
-            <div th:text="${question.description}"></div>
+            <div th:utext="${question.description.replaceAll('\n', '<br>')}"></div>
             <hr>
             <ul class="list-inline text-desc edit">
                 <li th:if="${(session.usr!=null)&&(question.creator==session.usr.id)}">
@@ -38,9 +40,67 @@
                     </a>
                 </li>
             </ul>
+            <div>
+                <!--评论条-->
+                <ul class="nav nav-tabs" style="margin: 10px 0">
+                    <li>
+                        <h3><span th:text="${question.commentCount}"></span> 条评论</h3>
+                    </li>
+                </ul>
+                <!-- 评论体 -->
+                <div th:each="comment : ${comments}">
+                    <div class="media subLine">
+                        <div class="media-left"> <!-- 头像 -->
+                            <a href="#">
+                                <img class="media-object index-icon img-rounded"
+                                     th:src="${comment.usr.avatarUrl}"
+                                     alt="这应该是头像">
+                            </a>
+                        </div>
+                        <div class="media-body" style="padding-top: 3px"> <!-- body -->
+                            <h6 class="media-heading"><span th:text="${comment.usr.name}"></span></h6>
+                            <div th:utext="${comment.content.replaceAll('\n', '<br>')}"></div>
+                            <!-- 点赞回复等功能 -->
+                            <div class="noneBorder text-desc item">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        <span th:text="${comment.likeCount}"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-comment"></span>
+                                    </button>
+                                </div>
+                                <span style="float:right;"
+                                        th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 提问框 -->
+            <div class="topSpace" id="comment_section" th:if="${session.usr != null}">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="/profile/question">
+                            <img class="media-object index-icon img-rounded"
+                                 th:src="${session.usr.avatarUrl}" alt="这应该是头像">
+                        </a>
+                    </div>
+                    <div class="media-body commentName">
+                        <h5 class="media-heading">
+                            <span th:text="${session.usr.name}"></span>
+                        </h5>
+                    </div>
+                </div>
+                <input type="hidden" id="question_id" th:value="${question.id}">
+                <textarea class="form-control commentText" rows="3"></textarea>
+                <button type="button" class="btn btn-success endLine" onclick="post()">回复</button>
+            </div>
         </div>
+        <!-- 右侧边框 -->
         <div class="col-lg-3 col-md-12 col-xs-12 col-sm-12">
-            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+            <div>
                 <h4>发起人</h4>
                 <div class="media">
                     <div class="media-left">
@@ -57,7 +117,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+            <hr>
+            <div>
                 <h4>相关问题</h4>
             </div>
         </div>
