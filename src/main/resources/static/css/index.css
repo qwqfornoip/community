@@ -1,8 +1,3 @@
-@keyframes myHover {
-    0% {background-color: transparent;}
-    100% {background-color: rgba(37, 37, 37, 0.3);}
-}
-
 body {
     background: url("../img/bg.png") repeat;
 }
@@ -42,9 +37,19 @@ a:hover,a:active,a:focus {
     padding-top: 10px;
     border-bottom: 1px solid #e5e5e5;
 }
+.boxLine {
+    border-radius: 5px;
+    border: 1px solid #e5e5e5;
+}
 
 .topSpace {
     padding-top: 10px;
+}
+.bottomSpace {
+    padding: 0 10px 10px 10px;
+}
+.marginBottom {
+    margin-bottom: 10px;
 }
 
 .text-desc, .text-desc *, .edit a {
@@ -59,8 +64,19 @@ a:hover,a:active,a:focus {
 .item button {
     background: transparent;
 }
-.item button:hover {
-    animation:myHover 1s;
+.item button:focus {
+    outline: none;
+}
+.item li {
+    margin: 5px 20px;
+    cursor: pointer;
+}
+.commentPanel {
+    background: #f0f0f0;
+}
+
+.active span {
+    color: #269abc;
 }
 
 .section a {
@@ -72,4 +88,9 @@ a:hover,a:active,a:focus {
 
 .section a:active {
     background-color: #337ab7;
+}
+
+.media {
+    padding: 10px 10px 0 10px;
+    margin: 0 10px 10px 10px;
 }

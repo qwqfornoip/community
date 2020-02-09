@@ -15,12 +15,15 @@
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <!-- get question information -->
     <script src="/js/community.js"></script>
+    <!-- 事件处理类 -->
+    <script src="/js/moment.js"></script>
 </head>
 <body>
 <div th:replace="~{navigation :: nav}"></div>
 <div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-xs-12 col-sm-12">
+            <!--浏览主页-->
             <h3><span th:text="${question.title}"></span></h3>
             <ul class="list-inline text-desc">
                 <li>作者: <span th:text="${question.usr.name}"></span></li>|
@@ -57,22 +60,36 @@
                                      alt="这应该是头像">
                             </a>
                         </div>
-                        <div class="media-body" style="padding-top: 3px"> <!-- body -->
+                        <div class="media-body" style="padding-top: 3px" th:id="${'comment-body-'+comment.id}"> <!-- body -->
                             <h6 class="media-heading"><span th:text="${comment.usr.name}"></span></h6>
                             <div th:utext="${comment.content.replaceAll('\n', '<br>')}"></div>
                             <!-- 点赞回复等功能 -->
-                            <div class="noneBorder text-desc item">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default">
-                                        <span class="glyphicon glyphicon-thumbs-up"></span>
-                                        <span th:text="${comment.likeCount}"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default">
-                                        <span class="glyphicon glyphicon-comment"></span>
-                                    </button>
-                                </div>
+                            <ul class="noneBorder text-desc item nav nav-pills">
+                                <li>
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                    <span th:text="${comment.likeCount}"></span>
+                                </li><!-- 点赞 -->
+                                <li th:data-id="${comment.id}" onclick="collapseComment(this)">
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                    <span th:text="${comment.commentCount}"></span>
+                                </li><!-- 评论 -->
                                 <span style="float:right;"
-                                        th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span>
+                                      th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd HH:mm')}">
+                                </span><!--日期-->
+                            </ul>
+
+                            <div class="collapse boxLine marginBottom commentPanel" th:id="${'comment-' + comment.id}">
+                                <!--这是二级评论主体-->
+                                <div class="bottomSpace">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="发表你的想法..."
+                                               th:id="${'reply-' + comment.id}">
+                                        <span class="input-group-btn">
+                                                <button class="btn btn-success" type="button" th:data-id="${comment.id}"
+                                                        onclick="comment2Comments(this)">评论</button>
+                                        </span>
+                                    </div>
+                                </div><!-- 二级评论条 -->
                             </div>
                         </div>
                     </div>
